@@ -146,3 +146,65 @@ fi
 # managing dotfiles is a good thing
 # -------------------------------------------------------------------
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+
+# -------------------------------------------------------------------
+# taking notes from command line is pretty cool and handy
+# -------------------------------------------------------------------
+note() {
+  # start a new heading and append from stdout
+  file_name=$HOME"/Documents/notes.md"
+  # get the date for datestamp
+  cur_date=$(date +"%Y-%m-%d")
+  # get the time for time
+  cur_time=$(date +"%H:%M:%S")
+
+  if [ ! -z "$1" ]; then
+#    clear
+    echo "" >> $file_name
+    echo "## $cur_date $cur_time $@" >> $file_name
+    cat $file_name
+    cat - >> $file_name
+    clear
+    cat $file_name
+
+  # append to file from stdout
+  else
+#   clear
+    cat $file_name
+    cat - >> $file_name
+    clear
+    cat $file_name
+  fi
+}
+
+notes() {
+  cur_dir=$(pwd)
+
+  if [ ! -z "$1" ]; then
+# commit and push if args are exactly "push"
+    if [ "$1" = "push" ]; then
+    cd "$HOME/Documents"
+    git add -A
+    git commit -m "update notes"
+    git push
+    cd $cur_dir
+
+# pull from github if args are exactly "pull"
+    elif [ "$1" = "pull" ]; then
+    cd "$HOME/Documents"
+    git pull
+    cd $cur_dir
+
+# open vim to search of the args
+    else
+    escaped=$(echo "$@" | sed s/\ /\\\\\ /g)
+    echo $escaped
+    vim +/"$escaped" "$HOME/Documents/notes.md"
+    fi
+
+# just open the notes
+  else
+  vim + "$HOME/Documents/notes.md"
+  fi
+}
