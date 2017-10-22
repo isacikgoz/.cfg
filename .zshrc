@@ -208,3 +208,5 @@ notes() {
   vim + "$HOME/Documents/notes.md"
   fi
 }
+
+export BROWSER=w3m
