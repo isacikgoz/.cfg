@@ -209,4 +209,4 @@ notes() {
   fi
 }
 
-export BROWSER=w3m
+# export BROWSER=w3m
